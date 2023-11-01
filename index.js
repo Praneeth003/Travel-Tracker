@@ -10,7 +10,7 @@ app.use(express.static("public"));
 
 const db = new pg.Client({
   user: "postgres",
-  password: "",
+  password: "Kpkpkp@003",
   host: "localhost",
   database: "World",
   port: 5433
@@ -26,6 +26,24 @@ app.get("/", async (req, res) => {
     countries.push(i.country_code);
   });
   res.render("index.ejs", {countries : countries, total: countries.length});
+});
+
+app.post("/add", async(req, res) => {
+  const enteredCountry = req.body["country"];
+  console.log(enteredCountry);
+  
+  const result = await db.query("Select country_code from countries where country_name = $1", [enteredCountry]);
+  console.log(result.rows);
+  
+  if(result.rows.length != 0){
+    const data = result.rows[0];
+    const countryCode = data.country_code;
+    console.log(countryCode);
+    console.log("qwerty");
+    await db.query("insert into visited_countries (country_code) values($1)", [countryCode]);
+    res.redirect("/");
+  }
+  
 });
 
 app.listen(port, () => {
