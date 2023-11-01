@@ -10,7 +10,7 @@ app.use(express.static("public"));
 
 const db = new pg.Client({
   user: "postgres",
-  password: "Kpkpkp@003",
+  password: "",
   host: "localhost",
   database: "World",
   port: 5433
@@ -39,7 +39,6 @@ app.post("/add", async(req, res) => {
     const data = result.rows[0];
     const countryCode = data.country_code;
     console.log(countryCode);
-    console.log("qwerty");
     await db.query("insert into visited_countries (country_code) values($1)", [countryCode]);
     res.redirect("/");
   }
